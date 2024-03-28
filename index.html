@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Noël's App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="wrapper"></div>
+
+    <script>
+        const TEST_MODE = false;
+        const bubbles = 37;
+        const items = [
+            { index: 11, url: '', text: '', },
+            { index: 12, url: '', size: '', },
+            { index: 17, url: '', image: '' },
+            { index: 18, url: '', text: '' },
+            { index: 19, url: '', text: '' },
+            { index: 24, url: '', image: '' },
+            { index: 25, url: '', text: '', }
+            // Add more objects with URLs and text as needed...
+        ];
+
+        function generatePastelColorByIndex(index) {
+            const hues = [0, 45, 80, 135, 180, 225, 270, 315];
+            const hueIndex = index % hues.length;
+            const hue = hues[hueIndex];
+            return `hsl(${hue}, 70%, 80%)`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.querySelector('.wrapper');
+
+            for (let i = 0; i < bubbles; i++) {
+                const div = document.createElement("div");
+                div.classList.add("item");
+                div.style.backgroundColor = generatePastelColorByIndex(i);
+
+                const currentItem = items.find(item => item.index === i) || {};
+                div.setAttribute('data-text', currentItem.text || '');
+
+                if (i == 18) { div.setAttribute('id', 'center') }
+
+                if (currentItem.size) {
+                    div.style.setProperty('--item-font-size', currentItem.size);
+                    div.style.setProperty('--item-svg-width', currentItem.size);
+                }
+
+                if (currentItem.image != '') { div.innerHTML = currentItem.image || ''; }
+
+                if (currentItem.url) {
+                    div.addEventListener("click", () => {
+                        window.open(currentItem.url, "_blank") || window.location.replace(currentItem.url);
+                    });
+                } else {
+                    // Handle cases where URL is not provided
+                    div.classList.add('disabled');
+                }
+
+                if (TEST_MODE) { div.textContent = i; }
+
+                wrapper.appendChild(div);
+            }
+        });
+
+    </script>
+
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
